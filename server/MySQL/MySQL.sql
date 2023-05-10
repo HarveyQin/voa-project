@@ -2039,3 +2039,8 @@ FROM hzb_order;
 CALL fetch_data('2023-05-01');
 ALTER TABLE hzb_visitor
 MODIFY password VARCHAR(100);
+-- Change the data contraint of the columns
+ALTER TABLE hzb_individual
+MODIFY COLUMN nationality VARCHAR(50) NULL;
+ALTER TABLE hzb_individual
+MODIFY COLUMN gender VARCHAR(50) NULL;

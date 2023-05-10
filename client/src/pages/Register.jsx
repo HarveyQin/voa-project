@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Header, Button } from '../components';
 
 const Register = () => {
   const [inputs, setInputs] = useState({
@@ -130,75 +131,84 @@ const Register = () => {
   };
 
   return (
-    <div className="auth">
-      <h1>Register</h1>
-      <form>
-        <label className="registerLabel" htmlFor="fname">First Name</label>
+    <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6">
+      <Header category="" title="Register" />
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="fname">First Name</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="text"
           placeholder="fname"
           name="fname"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="lname">Last Name</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="lname">Last Name</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="text"
           placeholder="lname"
           name="lname"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="gender">Gender</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="gender">Gender</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="text"
           placeholder="gender"
           name="gender"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="email">Email</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="email">Email</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="email"
           placeholder="email"
           name="email"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="password">Password</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="password">Password</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="password"
           placeholder="password"
           name="password"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="street">Street</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="street">Street</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="text"
           placeholder="street"
           name="street"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="city">City</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="city">City</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="text"
           placeholder="city"
           name="city"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="state">State</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="state">State</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="text"
           placeholder="state"
           name="state"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="zipcode">Zipcode</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="zipcode">Zipcode</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="text"
           placeholder="zipcode"
@@ -206,32 +216,36 @@ const Register = () => {
           pattern="[0-9]*"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="country">Country</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="country">Country</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="text"
           placeholder="country"
           name="country"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="cell_num">Cell Number</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="cell_num">Cell Number</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="tel"
           placeholder="cell_num"
           name="cell_num"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="dob">Date of Birth</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="dob">Date of Birth</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="date"
           placeholder="date of birth"
           name="dob"
           onChange={handleChange}
         />
-        <label className="registerLabel" htmlFor="type">Type</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="type">Type</label>
         <select
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           name="type"
           value={inputs.type}
@@ -243,8 +257,9 @@ const Register = () => {
           <option name="type" value="Member">member</option>
           <option name="type" value="School">student</option>
         </select>
-        <label className="registerLabel" htmlFor="visit_date">Visit Date</label>
+        <label className="block font-medium text-gray-700 mb-2" htmlFor="visit_date">Visit Date</label>
         <input
+          className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
           required
           type="date"
           placeholder="visit date"
@@ -252,11 +267,13 @@ const Register = () => {
           onChange={handleChange}
         />
 
-        <button onClick={handleSubmit}>Register</button>
-        {err && <p>{err}</p>}
-        <span>
-          Already have an account? <Link to="/login">Login</Link>
-        </span>
+        <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline" onClick={handleSubmit}>Register</button>
+        {err && <p className="mx-auto w-1/2 text-red-500 font-bold">{err}</p>}
+        <div className="flex items-center justify-between">
+          <span>
+            Already have an account? <Link className="text-blue-500 underline font-bold hover:no-underline" to="/login">Login</Link>
+          </span>
+        </div>
       </form>
     </div>
   );

@@ -1,49 +1,72 @@
-import React, { useContext } from "react";
+import React, { useEffect, useContext } from 'react';
+import { AiOutlineMenu } from 'react-icons/ai';
+import { FiShoppingCart } from 'react-icons/fi';
+import { BsChatLeft } from 'react-icons/bs';
+import { RiNotification3Line } from 'react-icons/ri';
+import { MdKeyboardArrowDown } from 'react-icons/md';
+import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+
+import avatar from '../data/avatar.jpg';
+import { Cart, Chat, Notification, UserProfile } from '.';
+import { useStateContext } from '../contexts/ContextProvider';
+import { AuthContext } from "../contexts/authContext";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../context/authContext";
-import Logo from "../img/logo.png";
+
+
+const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
+  <TooltipComponent content={title} position="BottomCenter">
+    <button
+      type="button"
+      onClick={() => customFunc()}
+      style={{ color }}
+      className="relative text-xl rounded-full p-3 hover:bg-light-gray"
+    >
+      <span
+        style={{ background: dotColor }}
+        className="absolute inline-flex rounded-full h-2 w-2 right-2 top-2"
+      />
+      {icon}
+    </button>
+  </TooltipComponent>
+);
 
 const Navbar = () => {
+  const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
   const { currentUser, logout } = useContext(AuthContext);
 
+  useEffect(() => {
+    const handleResize = () => setScreenSize(window.innerWidth);
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (screenSize <= 900) {
+      setActiveMenu(false);
+    } else {
+      setActiveMenu(true);
+    }
+  }, [screenSize]);
+
+  const handleActiveMenu = () => setActiveMenu(!activeMenu);
+
   return (
-    <div className="navbar">
-      <div className="container">
-        <div className="logo">
-          <Link to="/">
-            <img src={Logo} alt="" />
+    <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative">
+
+      <NavButton title="Menu" customFunc={handleActiveMenu} color={currentColor} icon={<AiOutlineMenu />} />
+      <div className="flex">
+        <span className='p-4'>{currentUser?.lname}</span>
+        {currentUser ? (
+          <Link className='p-4' onClick={logout} to="/login">Logout</Link>
+        ) : (
+          <Link className="link" to="/login">
+            Login
           </Link>
-        </div>
-        <div className="links">
-          <Link className="link" to="/tickets">
-            <h6>Tickets</h6>
-          </Link>
-          <Link className="link" to="/attractions">
-            <h6>Attractions</h6>
-          </Link>
-          <Link className="link" to="/shows">
-            <h6>Shows</h6>
-          </Link>
-          <Link className="link" to="/store">
-            <h6>Store</h6>
-          </Link>
-          <Link className="link" to="/parking">
-            <h6>Parking</h6>
-          </Link>
-          <span>{currentUser?.lname}</span>
-          {currentUser ? (
-            <span onClick={logout}>Logout</span>
-          ) : (
-            <Link className="link" to="/login">
-              Login
-            </Link>
-          )}
-          <span className="account">
-            <Link className="link" to="/account">
-              Account
-            </Link>
-          </span>
-        </div>
+        )}
       </div>
     </div>
   );

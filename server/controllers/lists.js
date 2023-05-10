@@ -1,6 +1,7 @@
 import { dbUtil } from "../dbUtil.js";
 
 export const getLists = (req, res) => {
+    console.log(req.body);
     const q = "SELECT * FROM ?";
 
     dbUtil.query(q, [req.query.table], (err, result) => {

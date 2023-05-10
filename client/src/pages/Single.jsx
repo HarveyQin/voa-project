@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Edit from "../img/edit.png";
 import Delete from "../img/delete.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Menu from "../components/Menu";
+import Menu from "../components/old/Menu";
 import axios from "axios";
 import moment from "moment";
 import { useContext } from "react";
-import { AuthContext } from "../context/authContext";
+import { AuthContext } from "../contexts/authContext";
 import DOMPurify from "dompurify";
 
 const Single = () => {
@@ -31,7 +31,7 @@ const Single = () => {
     fetchData();
   }, [postId]);
 
-  const handleDelete = async ()=>{
+  const handleDelete = async () => {
     try {
       await axios.delete(`/posts/${postId}`);
       navigate("/")
@@ -40,7 +40,7 @@ const Single = () => {
     }
   }
 
-  const getText = (html) =>{
+  const getText = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html")
     return doc.body.textContent
   }
@@ -73,7 +73,7 @@ const Single = () => {
             __html: DOMPurify.sanitize(post.desc),
           }}
         ></p>      </div>
-      <Menu cat={post.cat}/>
+      <Menu cat={post.cat} />
     </div>
   );
 };

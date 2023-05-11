@@ -5,6 +5,8 @@ export { default as Register } from './Register';
 export { default as Tickets } from './Tickets';
 export { default as PurchaseTicket } from './PurchaseTicket';
 export { default as Attractions } from './Attractions';
+export { default as AddAttractions } from './AddAttractions';
+export { default as UpdateAttractions } from './UpdateAttractions';
 export { default as Shows } from './Shows';
 export { default as Orders } from './Orders';
 export { default as Visitors } from './Visitors';

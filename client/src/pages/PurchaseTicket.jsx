@@ -1,20 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { Modal } from 'react-bootstrap';
-import { Header, Button } from '../components';
-import { useStateContext } from '../contexts/ContextProvider';
-import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
+import { Header } from '../components';
 import axios from 'axios';
 import { AuthContext } from '../contexts/authContext';
 
 
 function PurchaseTicket() {
-    // const [name, setName] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [ticketType, setTicketType] = useState('');
-    const { currentColor } = useStateContext();
     const { currentUser } = useContext(AuthContext);
-    const [showModal, setShowModal] = useState(false);
-    const [result, setResult] = useState('');
     const [message, setMessage] = useState("");
 
     const [inputs, setInputs] = useState({
@@ -23,18 +14,13 @@ function PurchaseTicket() {
     });
 
     const handleChange = (e) => {
-
-        // setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
         const { name, value } = e.target;
         setInputs({ ...inputs, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Here you can make a request to your backend API to buy the ticket
         // get other info
-        // INSERT INTO hzb_tickets (method, prch_date, vist_date, type, price, visitor_id)
-        // VALUES ('Online', '2023-05-01', '2023-06-30', 'Child', 20, 1);
         const req = { method: 'Online', prch_date: new Date().toISOString().slice(0, 10), vist_date: inputs.visit_date, type: inputs.type, price: 35, visitor_id: currentUser.visitor_id };
 
         try {
@@ -46,9 +32,6 @@ function PurchaseTicket() {
         }
     };
 
-    const handleClose = () => {
-        setShowModal(false);
-    };
 
     return (
         <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6">
@@ -83,9 +66,7 @@ function PurchaseTicket() {
                 </div>
             </form>
             {message && <div className="p-4 font-bold">{message}</div>}
-
         </div>
-
     );
 }
 

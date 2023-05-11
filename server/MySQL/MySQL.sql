@@ -2044,3 +2044,5 @@ ALTER TABLE hzb_individual
 MODIFY COLUMN nationality VARCHAR(50) NULL;
 ALTER TABLE hzb_individual
 MODIFY COLUMN gender VARCHAR(50) NULL;
+ALTER TABLE hzb_visitor
+ADD role ENUM('Employee', 'Customer') DEFAULT 'Customer';

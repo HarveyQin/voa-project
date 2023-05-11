@@ -1,21 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useEffect } from "react";
 import { GridComponent, Inject, ColumnsDirective, ColumnDirective, Search, Page } from '@syncfusion/ej2-react-grids';
 import { Header } from '../components';
-
+import { AuthContext } from '../contexts/authContext';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const getAdress = (props) => (
-    <div className="flex items-center justify-center gap-2">
-        <span>{props.street + " " + props.city + ", " + props.state + ", " + props.country}</span>
-    </div>
-);
-
-const getFullname = (props) => (
-    <div className="flex items-center justify-center gap-2">
-        <span>{props.fname + " " + props.lname}</span>
-    </div>
-);
 
 const attractGrid = [
     {
@@ -75,8 +65,68 @@ const attractGrid = [
 ];
 
 
-const Attractions = () => {
 
+const Attractions = () => {
+    const navigate = useNavigate();
+    const { currentUser } = useContext(AuthContext);
+    const [message, setMessage] = useState("");
+
+    const [inputs, setInputs] = useState({
+        name: "",
+        description: "",
+        type: "",
+        status: "",
+        cpacity: "",
+        min_height: "",
+        duration: "",
+        section: "",
+    });
+
+    const handleAdd = (e) => {
+        e.preventDefault();
+        navigate("/attractions/add");
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        navigate("/attractions/update");
+    };
+
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.delete(`/attractions/${localStorage.getItem('selectedID')}`);
+            // console.log(res.data);
+            setMessage(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const handleRowSelected = (args) => {
+        const selectedID = args.data.attract_id;
+        // console.log(selectedID);
+        localStorage.setItem('selectedID', selectedID);
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setInputs({ ...inputs, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post('/attractions', inputs);
+            // console.log(res.data);
+            setMessage(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
+    // Get all attractions data
     const [attractData, setAttractData] = useState([]);
 
     useEffect(() => {
@@ -97,19 +147,20 @@ const Attractions = () => {
 
     const toolbarOptions = ['Search'];
 
-    const editing = { allowDeleting: true, allowEditing: true };
 
     return (
         <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
             <Header category="Page" title="Attractions" />
             <GridComponent
+                id='table'
                 dataSource={attractData}
                 width="auto"
                 allowPaging
                 allowSorting
                 pageSettings={{ pageCount: 5 }}
-                editSettings={editing}
                 toolbar={toolbarOptions}
+                selectionSettings={{ type: 'Single', mode: 'Row', checkboxOnly: false }}
+                rowSelected={handleRowSelected}
             >
                 <ColumnsDirective>
                     {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -118,6 +169,17 @@ const Attractions = () => {
                 <Inject services={[Search, Page]} />
 
             </GridComponent>
+
+            {message && <div className="p-4 font-bold">{message}</div>}
+
+
+            <div className="pt-4 flex flex-row justify-center">
+                <button className="m-4 w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 p-4 rounded-md focus:outline-none focus:shadow-outline" onClick={handleAdd}>Add</button>
+                <button className="m-4 w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 p-4 rounded-md focus:outline-none focus:shadow-outline" onClick={handleUpdate}>Update</button>
+                <button className="m-4 w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 p-4 rounded-md focus:outline-none focus:shadow-outline" onClick={handleDelete}>Delete</button>
+            </div>
+
+
         </div>
     );
 };

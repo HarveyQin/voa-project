@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 import { Navbar, Footer, Sidebar, ThemeSettings } from './components';
-import { Ecommerce, Orders, Calendar, Visitors, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor, Attractions, Shows, Parking, Store, Tickets, PurchaseTicket, Login, Register } from './pages';
+import { Ecommerce, Orders, Calendar, Visitors, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor, Attractions, Shows, Parking, Store, Tickets, PurchaseTicket, Login, Register, AddAttractions, UpdateAttractions } from './pages';
 import './App.css';
 
 import { useStateContext } from './contexts/ContextProvider';
@@ -31,6 +31,7 @@ const App = () => {
             <div>
                 <BrowserRouter>
                     <Routes>
+                        <Route path="/" element={<Navigate to="/login" />} />
                         <Route path="/login" element={(<Login />)} />
                         <Route path="/register" element={(<Register />)} />
                     </Routes>
@@ -90,6 +91,9 @@ const App = () => {
                                 <Route path="/purchase-tickets" element={<PurchaseTicket />} />
                                 <Route path="/tickets" element={<Tickets />} />
                                 <Route path="/attractions" element={<Attractions />} />
+                                <Route path="/attractions/add" element={<AddAttractions />} />
+                                <Route path="/attractions/update" element={<UpdateAttractions />} />
+
                                 <Route path="/shows" element={<Shows />} />
                                 <Route path="/parking" element={<Parking />} />
                                 <Route path="/store" element={<Store />} />

@@ -1,22 +1,18 @@
 DROP DATABASE IF EXISTS voa_database;
 CREATE DATABASE voa_database;
 USE voa_database;
-CREATE TABLE hzb_employee (
-  employee_id INT PRIMARY KEY,
-  password VARCHAR(255) NOT NULL
-);
-CREATE TABLE card (
+CREATE TABLE hzb_card (
   pay_id INT(10) NOT NULL,
   ch_fname VARCHAR(20) NOT NULL,
   ch_lname VARCHAR(20) NOT NULL,
-  c_number VARCHAR(20) NOT NULL,
+  c_number BIGINT(50) NOT NULL,
   exp_date DATE NOT NULL,
-  cvv VARCHAR(3) NOT NULL,
-  type VARCHAR(10) NOT NULL
+  cvv INT(3) NOT NULL,
+  type VARCHAR(20) NOT NULL
 );
-ALTER TABLE card
-ADD CONSTRAINT card_pk PRIMARY KEY (pay_id);
-ALTER TABLE card
+ALTER TABLE hzb_card
+ADD CONSTRAINT hzb_card_pk PRIMARY KEY (pay_id);
+ALTER TABLE hzb_card
 MODIFY pay_id INT(10) NOT NULL COMMENT 'Cash, credit or debit card',
   MODIFY ch_fname VARCHAR(20) NOT NULL COMMENT 'card host first name',
   MODIFY ch_lname VARCHAR(20) NOT NULL COMMENT 'card host last name',
@@ -123,6 +119,12 @@ CREATE TABLE hzb_payment (
   pay_method VARCHAR(16) NOT NULL,
   pay_date DATE NOT NULL,
   pay_amount INT(5) NOT NULL,
+  ch_fname VARCHAR(20),
+  ch_lname VARCHAR(20),
+  c_number BIGINT(50),
+  exp_date DATE,
+  cvv INT(3),
+  type VARCHAR(20),
   PRIMARY KEY (pay_id),
   CHECK (pay_method IN ('Cash', 'Credit', 'Debit'))
 );
@@ -236,7 +238,7 @@ ALTER TABLE hzb_visitor
 ADD CONSTRAINT ch_inh_hzb_visitor CHECK (
     type IN ('Individual', 'Group', 'School', 'Member')
   );
-ALTER TABLE card
+ALTER TABLE hzb_card
 ADD CONSTRAINT card_hzb_payment_fk FOREIGN KEY (pay_id) REFERENCES hzb_payment (pay_id);
 ALTER TABLE hzb_group
 ADD CONSTRAINT group_hzb_visitor_fk FOREIGN KEY (visitor_id) REFERENCES hzb_visitor (visitor_id);
@@ -373,6 +375,30 @@ END IF;
 IF v_visitor_id IS NOT NULL THEN
 INSERT INTO hzb_group (visitor_id, group_size)
 VALUES (v_visitor_id, v_size);
+END IF;
+END / / DELIMITER;
+DELIMITER / / CREATE TRIGGER insert_card
+AFTER
+INSERT ON hzb_payment FOR EACH ROW BEGIN IF NEW.pay_method = 'Credit'
+  OR NEW.pay_method = 'Debit' THEN
+INSERT INTO hzb_card (
+    pay_id,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv,
+    type
+  )
+VALUES (
+    NEW.pay_id,
+    NEW.ch_fname,
+    NEW.ch_lname,
+    NEW.c_number,
+    NEW.exp_date,
+    NEW.cvv,
+    NEW.pay_method
+  );
 END IF;
 END / / DELIMITER;
 DELIMITER / / CREATE TRIGGER insert_school
@@ -563,7 +589,232 @@ WHERE ord_date = input_date;
 SELECT *
 FROM hzb_summ;
 END / / DELIMITER;
--- DML FOR VISTOR-- 
+-- DML FOR PAYMENT
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Cash',
+    '2023-04-06',
+    200.50,
+    null,
+    null,
+    NULL,
+    null,
+    null
+  );
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Credit',
+    '2023-04-06',
+    500.00,
+    'John',
+    'Doe',
+    1234213124143,
+    '2024-12-31',
+    '123'
+  );
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Debit',
+    '2023-04-06',
+    150.75,
+    'Jane',
+    'Smith',
+    9876543210987654,
+    '2023-06-30',
+    '456'
+  );
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Cash',
+    '2023-04-07',
+    100.00,
+    null,
+    null,
+    NULL,
+    null,
+    null
+  );
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Credit',
+    '2023-04-07',
+    300.25,
+    'Mark',
+    'Johnson',
+    7890123456789012,
+    '2025-08-31',
+    '789'
+  );
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Debit',
+    '2023-04-08',
+    50.00,
+    'Sarah',
+    'Wilson',
+    5432109876543210,
+    '2023-09-30',
+    '321'
+  );
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Cash',
+    '2023-04-08',
+    75.50,
+    null,
+    null,
+    NULL,
+    null,
+    null
+  );
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Credit',
+    '2023-04-09',
+    600.00,
+    'David',
+    'Brown',
+    4567890123456789,
+    '2024-10-31',
+    '567'
+  );
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Debit',
+    '2023-04-09',
+    250.75,
+    'Emily',
+    'Davis',
+    2109876543210987,
+    '2023-07-31',
+    '234'
+  );
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Cash',
+    '2023-04-10',
+    50.00,
+    null,
+    null,
+    NULL,
+    null,
+    null
+  );
+INSERT INTO hzb_payment (
+    pay_method,
+    pay_date,
+    pay_amount,
+    ch_fname,
+    ch_lname,
+    c_number,
+    exp_date,
+    cvv
+  )
+VALUES (
+    'Credit',
+    '2023-04-11',
+    150.50,
+    'Michael',
+    'Taylor',
+    2109876543210987,
+    '2023-07-31',
+    '234'
+  );
+SELECT *
+FROM hzb_payment;
+SELECT *
+FROM hzb_card;
+-- DML FOR SHOW-- 
 INSERT INTO hzb_show (
     name,
     description,
@@ -779,7 +1030,7 @@ VALUES (
     '1234567890',
     '1990-01-01',
     'Member',
-    '2022-05-05',
+    '2022-04-28',
     null,
     null,
     null,
@@ -817,7 +1068,7 @@ VALUES (
     '0987654321',
     '1995-07-15',
     'Individual',
-    '2022-05-05',
+    '2022-04-29',
     null,
     null,
     'Male',
@@ -855,7 +1106,7 @@ VALUES (
     '1112223333',
     '2005-09-01',
     'School',
-    '2022-05-05',
+    '2022-04-30',
     null,
     'River',
     null,
@@ -893,7 +1144,7 @@ VALUES (
     '4445556666',
     '1998-03-22',
     'Group',
-    '2022-05-05',
+    '2022-05-01',
     20,
     null,
     null,
@@ -931,7 +1182,7 @@ VALUES (
     '7778889999',
     '1992-12-01',
     'Member',
-    '2022-05-05',
+    '2022-05-02',
     null,
     null,
     null,
@@ -969,7 +1220,7 @@ VALUES (
     '2223334444',
     '1985-05-11',
     'Individual',
-    '2022-05-05',
+    '2022-05-03',
     null,
     null,
     'Male',
@@ -1007,7 +1258,7 @@ VALUES (
     '5556667777',
     '2007-10-15',
     'School',
-    '2022-05-05',
+    '2022-05-04',
     null,
     'South',
     null,
@@ -1045,7 +1296,7 @@ VALUES (
     '8889990000',
     '1999-06-30',
     'Group',
-    '2022-05-05',
+    '2022-05-06',
     15,
     null,
     null,
@@ -1427,6 +1678,45 @@ VALUES (
   );
 SELECT *
 FROM hzb_attract;
+-- DML FOR VISIT
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (1, '2023-04-04', 3);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (1, '2023-04-04', 1);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (1, '2023-04-04', 2);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (1, '2023-04-04', 4);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (2, '2023-04-03', 1);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (2, '2023-04-03', 5);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (2, '2023-04-03', 2);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (2, '2023-04-03', 3);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (2, '2023-04-03', 8);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (2, '2023-04-03', 7);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (3, '2023-04-02', 2);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (3, '2023-04-02', 5);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (3, '2023-04-02', 4);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (3, '2023-04-02', 3);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (3, '2023-04-02', 8);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (3, '2023-04-02', 7);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (7, '2023-03-28', 6);
+INSERT INTO hzb_visit (attract_id, `date`, visitor_id)
+VALUES (7, '2023-03-28', 5);
+SELECT *
+FROM hzb_visit;
 -- DML for hzb_tickets
 INSERT INTO hzb_tickets (
     method,
@@ -2046,3 +2336,58 @@ ALTER TABLE hzb_individual
 MODIFY COLUMN gender VARCHAR(50) NULL;
 ALTER TABLE hzb_visitor
 ADD role ENUM('Employee', 'Customer') DEFAULT 'Customer';
+-- Q1
+-- SELECT v.fname, v.lname, o.show_id, s.name
+-- FROM hzb_visitor v
+-- JOIN hzb_order o ON v.visitor_id = o.visitor_id
+-- JOIN hzb_show s ON o.show_id = s.show_id;
+-- Q2
+-- SELECT v.fname, v.lname, o.ord_amount, (SELECT AVG(ord_amount) FROM hzb_order) AS 'AVG'
+-- FROM hzb_visitor v
+-- JOIN hzb_order o ON v.visitor_id = o.visitor_id
+-- WHERE o.ord_amount > (SELECT AVG(ord_amount) FROM hzb_order);
+-- Q3
+-- SELECT a.name, a.cpacity
+-- FROM hzb_attract a
+-- WHERE a.cpacity > (
+--   SELECT AVG(cpacity)
+--   FROM hzb_attract b
+--   WHERE a.type = b.type
+-- );
+-- Q4
+-- SELECT fname, lname
+-- FROM hzb_visitor
+-- WHERE type = 'Individual'
+-- UNION
+-- SELECT school_name, ''
+-- FROM hzb_visitor
+-- WHERE type = 'School';
+-- Q5
+-- WITH visitor_purchases AS (
+--   SELECT v.visitor_id, COUNT(*) AS purchase_count
+--   FROM hzb_visitor v
+--   JOIN hzb_order o ON v.visitor_id = o.visitor_id
+--   GROUP BY v.visitor_id
+-- )
+-- SELECT v.fname, v.lname, vp.purchase_count AS 'Count'
+-- FROM hzb_visitor v
+-- JOIN visitor_purchases vp ON v.visitor_id = vp.visitor_id
+-- WHERE vp.purchase_count >= 3;
+-- SELECT fname, lname, visit_date
+-- FROM hzb_visitor
+-- ORDER BY visit_date DESC
+-- LIMIT 5;
+-- SHOW TRIGGERS;
+-- SELECT * FROM hzb_member;
+SELECT TABLE_NAME,
+  TABLE_ROWS
+FROM information_schema.TABLES
+WHERE TABLE_SCHEMA = 'voa_database';
+SELECT *
+FROM hzb_payment;
+SELECT COUNT(*) AS row_count
+FROM hzb_payment;
+SELECT *
+FROM hzb_visit;
+SELECT COUNT(*) AS row_count
+FROM hzb_visit;

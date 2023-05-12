@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 import { Navbar, Footer, Sidebar, ThemeSettings } from './components';
-import { Ecommerce, Orders, Calendar, Visitors, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Financial, ColorPicker, ColorMapping, Editor, Attractions, Shows, Parking, Store, Tickets, PurchaseTicket, Login, Register, AddAttractions, UpdateAttractions, AddParking, UpdateParking, AddShow, UpdateShow, AddStore, UpdateStore, Summary } from './pages';
+import { Orders, Visitors, Attractions, Shows, Parking, Store, Tickets, PurchaseTicket, Login, Register, AddAttractions, UpdateAttractions, AddParking, UpdateParking, AddShow, UpdateShow, AddStore, UpdateStore, Summary } from './pages';
 import './App.css';
 
 import { useStateContext } from './contexts/ContextProvider';
@@ -84,7 +84,7 @@ const App = () => {
 
                             <Routes>
                                 {/* dashboard  */}
-                                <Route path="/" element={(<Ecommerce />)} />
+                                <Route path="/" element={(<Summary />)} />
 
                                 {/* pages  */}
                                 <Route path="/purchase-tickets" element={<PurchaseTicket />} />

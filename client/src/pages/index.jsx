@@ -1,5 +1,3 @@
-export { default as Ecommerce } from './Ecommerce';
-export { default as Kanban } from './Kanban';
 export { default as Login } from './Login';
 export { default as Register } from './Register';
 export { default as Tickets } from './Tickets';
@@ -18,16 +16,5 @@ export { default as UpdateStore } from './UpdateStore';
 export { default as Parking } from './Parking';
 export { default as AddParking } from './AddParking';
 export { default as UpdateParking } from './UpdateParking';
-export { default as Editor } from './Editor';
-export { default as Customers } from './Customers';
-export { default as ColorPicker } from './ColorPicker';
-export { default as Calendar } from './Calendar';
-export { default as Area } from './Charts/Area';
-export { default as Bar } from './Charts/Bar';
-export { default as ColorMapping } from './Charts/ColorMapping';
-export { default as Financial } from './Charts/Financial';
-export { default as Line } from './Charts/Line';
 export { default as Summary } from './Summary';
-export { default as Pyramid } from './Charts/Pyramid';
-export { default as Stacked } from './Charts/Stacked';
 

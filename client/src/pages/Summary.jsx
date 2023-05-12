@@ -1,6 +1,6 @@
-import React from 'react';
-import { ChartsHeader, Pie as PieChart } from '../../components';
-
+import React, { useState, useContext, useEffect } from 'react';
+import { ChartsHeader, Pie as PieChart } from '../components';
+import axios from 'axios';
 // export const pieChartData = [
 //   { x: 'Labour', y: 18, text: '18%' },
 //   { x: 'Legal', y: 8, text: '8%' },
@@ -33,18 +33,54 @@ function calculatePercentage(data) {
 }
 
 const Pie = () => {
+  // show defualt data
+  const [summData, setSummData] = useState([]);
+  const [sourcePercentage, setSourcePercentage] = useState([]);
+  // setSourcePercentage(calculatePercentage(testData[0]));
 
-  //TODO add a datepicker to select the date
+  const [message, setMessage] = useState("");
+  const [inputs, setInputs] = useState({
+    date: ""
+  });
 
-  //TODO get the data of the selected date from the database
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
+  };
 
-  const sourcePercentage = calculatePercentage(testData[0]);
-  // console.log('sourcePercentage');
-  // console.log(sourcePercentage);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.get(`/summ/${inputs.date}`);
+      setSummData(res.data);
+      setSourcePercentage(calculatePercentage(res.data[0]));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    setSourcePercentage(calculatePercentage(testData[0]));
+  }, []);
 
   return (
     <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl">
       <ChartsHeader category="Summary" title="Payment Summary" />
+      <form id="addForm" className="space-y-6" onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Choose a date</label>
+          <input
+            className="appearance-none rounded-md w-full py-2 px-3 text-gray-700 border border-gray-300 leading-tight focus:outline-none focus:shadow-outline"
+            required
+            type="date"
+            name="date"
+            onChange={handleChange}
+          />
+        </div>
+        {message && <div className="p-4 font-bold">{message}</div>}
+        <button className=" bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
+          onClick={handleSubmit}>Get Summary</button>
+      </form>
       <div className="w-full">
         <PieChart id="chart-pie" data={sourcePercentage} legendVisiblity height="full" />
       </div>

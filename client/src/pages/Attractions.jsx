@@ -173,11 +173,12 @@ const Attractions = () => {
             {message && <div className="p-4 font-bold">{message}</div>}
 
 
-            <div className="pt-4 flex flex-row justify-center">
+            {(currentUser.role === "Employee") ? <div className="pt-4 flex flex-row justify-center">
                 <button className="m-4 w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 p-4 rounded-md focus:outline-none focus:shadow-outline" onClick={handleAdd}>Add</button>
                 <button className="m-4 w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 p-4 rounded-md focus:outline-none focus:shadow-outline" onClick={handleUpdate}>Update</button>
                 <button className="m-4 w-1/3 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 p-4 rounded-md focus:outline-none focus:shadow-outline" onClick={handleDelete}>Delete</button>
-            </div>
+            </div> : <div />
+            }
 
 
         </div>

@@ -9,7 +9,7 @@ export const summ = (req, res) => {
         if (err) {
             return res.status(500).send(err);
         }
-        console.log(result);
+        // console.log(result);
         return res.status(200).json(result);
     });
 }

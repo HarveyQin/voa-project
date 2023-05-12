@@ -13,15 +13,14 @@ import { useStateContext } from '../contexts/ContextProvider';
 
 const links = [
   {
-    title: 'Dashboard',
+    title: 'Summary',
     links: [
       {
-        name: 'ecommerce',
-        icon: <FiShoppingBag />,
-        roles: ['Employee', 'Customer'],
+        name: 'summary',
+        icon: <FiPieChart />,
+        roles: ['Employee'],
       },
     ],
-
   },
   {
     title: 'Pages',
@@ -66,23 +65,9 @@ const links = [
         icon: <IoMdContacts />,
         roles: ['Employee'],
       },
-      {
-        name: 'customers',
-        icon: <RiContactsLine />,
-        roles: ['Employee'],
-      },
     ],
   },
-  {
-    title: 'Summary',
-    links: [
-      {
-        name: 'pie',
-        icon: <FiPieChart />,
-        roles: ['Employee'],
-      },
-    ],
-  },
+
 ];
 
 
